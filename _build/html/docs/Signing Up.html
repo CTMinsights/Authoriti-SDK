@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signing Up &#8212; Authoriti SDK 0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Wallet Management" href="Wallet%20Management.html" />
+    <link rel="prev" title="Initializing the SDK" href="SDK%20Initialization.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="signing-up">
+<h1>Signing Up<a class="headerlink" href="#signing-up" title="Permalink to this headline">¶</a></h1>
+<p>A valid Authoriti user must have an invitation code along with a valid username and password combination. The SDK provides methods for checking the validity of an invitation code, and onboarding a new user using the invitation code, username and password combination.</p>
+<ol class="simple">
+<li><p>Check invitation code</p></li>
+</ol>
+<ul class="simple">
+<li><p>Call <code class="docutils literal notranslate"><span class="pre">checkInvitationCode</span></code> method and pass the invitation code as the first argument</p></li>
+</ul>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">authoritiSDK</span><span class="p">.</span><span class="na">checkInvitationCode</span><span class="p">(</span><span class="s">&quot;abcdefg&quot;</span><span class="p">,</span> <span class="n">InvitationCode</span><span class="p">.</span><span class="na">OnResultReceivedCallback</span> <span class="n">callback</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Get the result by implementing the following listener</p></li>
+</ul>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kd">interface</span> <span class="nc">OnResultReceivedCallback</span> <span class="p">{</span>
+	<span class="kt">void</span> <span class="nf">onResultReceived</span><span class="p">(</span><span class="n">ErrorResponse</span> <span class="n">error</span><span class="p">,</span> <span class="n">InvitationCodeResult</span> <span class="n">result</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// result.isValid() is true if the provided invitation code was a valid invitation code.</span>
+<span class="c1">// result.getCustomerName() returns the name of the customer who created the invitation code.</span>
+</pre></div>
+</div>
+<p><strong>Note: Calling the checkInvitationMethod is optional since <em>signup</em> requires the invitation code to be passed. The <em>checkInvitationCode</em> method is useful to build interfaces that use a two step signup process with the first step being checking if the user has a valid invitation code and then asking the user to enter their username and password. The string from <em>getCustomerName()</em> can identify the customer the user is registering to.</strong></p>
+<ol class="simple">
+<li><p>Signup user</p></li>
+</ol>
+<ul class="simple">
+<li><p>Call<code class="docutils literal notranslate"><span class="pre">signupUser</span></code> method with invitation code, username and password</p></li>
+</ul>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">authoritiSDK</span><span class="p">.</span><span class="na">signupUser</span><span class="p">(</span><span class="s">&quot;abcdefg&quot;</span><span class="p">,</span> <span class="s">&quot;tom&quot;</span><span class="p">,</span> <span class="s">&quot;123456&quot;</span><span class="p">,</span> <span class="n">User</span><span class="p">.</span><span class="na">OnUserSignedUpCallback</span> <span class="n">callback</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Get the result by implementing the following listener</p></li>
+</ul>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">User</span><span class="p">.</span><span class="na">OnUserSignedUpCallback</span> <span class="p">{</span>
+	<span class="kt">void</span> <span class="nf">onUserSignedUp</span><span class="p">(</span><span class="n">ErrorResponse</span> <span class="n">error</span><span class="p">,</span> <span class="n">User</span> <span class="n">user</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// user.getAccounts() can be used to a *List&lt;Account&gt;* object which holds the list of accounts that the signup call imported.</span>
+</pre></div>
+</div>
+<p>After a successful signup call, the SDK initializes a Wallet object which holds the users account information. The contents of the wallet is securely stored on the device encrypted using the <em>Master Password</em> - the <em>Master Password</em> is the password used by the user during signup.</p>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Authoriti SDK</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SDK%20Initialization.html">Initializing the SDK</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Signing Up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Wallet%20Management.html">Wallet Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Purposes.html">Purposes and Permission Code Generation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="SDK%20Initialization.html" title="previous chapter">Initializing the SDK</a></li>
+      <li>Next: <a href="Wallet%20Management.html" title="next chapter">Wallet Management</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, CTMInsights.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/docs/Signing Up.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

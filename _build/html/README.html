@@ -1,0 +1,342 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Authoriti Android SDK v0.1 &#8212; Authoriti SDK 0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="authoriti-android-sdk-v0-1">
+<h1>Authoriti Android SDK v0.1<a class="headerlink" href="#authoriti-android-sdk-v0-1" title="Permalink to this headline">¶</a></h1>
+<p><strong>September 2020</strong></p>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This document provides detailed information about the Authoriti Android SDK.</p>
+<p>The Authoriti registration flow is described below.</p>
+<p><img alt="https://authoriti-sdk.s3.amazonaws.com/images/registration-workflow.jpg" src="https://authoriti-sdk.s3.amazonaws.com/images/registration-workflow.jpg" /></p>
+<p>The Authoriti Permission Code validation flow is described below.</p>
+<p><img alt="https://authoriti-sdk.s3.amazonaws.com/images/validation-workflow.jpg" src="https://authoriti-sdk.s3.amazonaws.com/images/validation-workflow.jpg" /></p>
+<p>The Authoriti SDK work flows are described below</p>
+<p><img alt="https://authoriti-sdk.s3.amazonaws.com/images/flowchart.jpg" src="https://authoriti-sdk.s3.amazonaws.com/images/flowchart.jpg" /></p>
+<p>testing</p>
+</div>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Supports Android SDK version 21 and above</p></li>
+</ul>
+<div class="section" id="setup">
+<h3>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h3>
+<ol class="simple">
+<li><p>Specify the permissions in the App manifest file: [TODO]</p></li>
+<li><p>Add the Authoriti SDK dependency in <strong>build.gradle</strong> [TODO]</p></li>
+</ol>
+</div>
+<div class="section" id="initializing-the-sdk">
+<h3>Initializing the SDK<a class="headerlink" href="#initializing-the-sdk" title="Permalink to this headline">¶</a></h3>
+<p>To use the SDK, it must be initialized by passing the license key and the base URL.</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Authoriti</span> <span class="n">authoritiSDK</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Authoriti</span><span class="p">(</span><span class="s">&quot;authoriti-xxxxxxxxxx&quot;</span><span class="p">,</span> <span class="s">&quot;https://api.authoriti.net&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>All SDK methods should be invoked on an instance of the Authoriti class.</p>
+</div>
+<div class="section" id="signing-up">
+<h3>Signing Up<a class="headerlink" href="#signing-up" title="Permalink to this headline">¶</a></h3>
+<p>A valid Authoriti user must have an invitation code along with a valid username and password combination. The SDK provides methods for checking the validity of an invitation code, and onboarding a new user using the invitation code, username and password combination.</p>
+<ol class="simple">
+<li><p>Check invitation code</p></li>
+</ol>
+<ul class="simple">
+<li><p>Call <code class="docutils literal notranslate"><span class="pre">checkInvitationCode</span></code> method and pass the invitation code as the first argument</p></li>
+</ul>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">authoritiSDK</span><span class="p">.</span><span class="na">checkInvitationCode</span><span class="p">(</span><span class="s">&quot;abcdefg&quot;</span><span class="p">,</span> <span class="n">InvitationCode</span><span class="p">.</span><span class="na">OnResultReceivedCallback</span> <span class="n">callback</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Get the result by implementing the following listener</p></li>
+</ul>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kd">interface</span> <span class="nc">OnResultReceivedCallback</span> <span class="p">{</span>
+	<span class="kt">void</span> <span class="nf">onResultReceived</span><span class="p">(</span><span class="n">ErrorResponse</span> <span class="n">error</span><span class="p">,</span> <span class="n">InvitationCodeResult</span> <span class="n">result</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// result.isValid() is true if the provided invitation code was a valid invitation code.</span>
+<span class="c1">// result.getCustomerName() returns the name of the customer who created the invitation code.</span>
+</pre></div>
+</div>
+<p><strong>Note: Calling the checkInvitationMethod is optional since <em>signup</em> requires the invitation code to be passed. The <em>checkInvitationCode</em> method is useful to build interfaces that use a two step signup process with the first step being checking if the user has a valid invitation code and then asking the user to enter their username and password. The string from <em>getCustomerName()</em> can identify the customer the user is registering to.</strong></p>
+<ol class="simple">
+<li><p>Signup user</p></li>
+</ol>
+<ul class="simple">
+<li><p>Call<code class="docutils literal notranslate"><span class="pre">signupUser</span></code> method with invitation code, username and password</p></li>
+</ul>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">authoritiSDK</span><span class="p">.</span><span class="na">signupUser</span><span class="p">(</span><span class="s">&quot;abcdefg&quot;</span><span class="p">,</span> <span class="s">&quot;tom&quot;</span><span class="p">,</span> <span class="s">&quot;123456&quot;</span><span class="p">,</span> <span class="n">User</span><span class="p">.</span><span class="na">OnUserSignedUpCallback</span> <span class="n">callback</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Get the result by implementing the following listener</p></li>
+</ul>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">User</span><span class="p">.</span><span class="na">OnUserSignedUpCallback</span> <span class="p">{</span>
+	<span class="kt">void</span> <span class="nf">onUserSignedUp</span><span class="p">(</span><span class="n">ErrorResponse</span> <span class="n">error</span><span class="p">,</span> <span class="n">User</span> <span class="n">user</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// user.getAccounts() can be used to a *List&lt;Account&gt;* object which holds the list of accounts that the signup call imported.</span>
+</pre></div>
+</div>
+<p>After a successful signup call, the SDK initializes a Wallet object which holds the users account information. The contents of the wallet is securely stored on the device encrypted using the <em>Master Password</em> - the <em>Master Password</em> is the password used by the user during signup.</p>
+</div>
+<div class="section" id="wallet-management">
+<h3>Wallet Management<a class="headerlink" href="#wallet-management" title="Permalink to this headline">¶</a></h3>
+<ol class="simple">
+<li><p>Exporting a Wallet: A Qr code for the users wallet protected by the master password can be generated by using the following method.</p></li>
+</ol>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">String</span> <span class="n">qrCode</span> <span class="o">=</span> <span class="n">WalletManagement</span><span class="p">.</span><span class="na">exportWallet</span><span class="p">(</span><span class="n">WebView</span> <span class="n">webview</span><span class="p">,</span> <span class="n">OnWalletExportedCallback</span> <span class="n">callback</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>This method requires an instance of <code class="docutils literal notranslate"><span class="pre">WebView</span></code> - the <code class="docutils literal notranslate"><span class="pre">WebView</span></code> should be attached to the current <code class="docutils literal notranslate"><span class="pre">Activity</span></code> - to be passed in as the first argument.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">exportWallet</span></code> method must not be run in the UI Thread, and the application is responsible for displaying the Qr code using an appropriate Qr code viewer.</p>
+<ul class="simple">
+<li><p>Get the result by implementing the following callback</p></li>
+</ul>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">WalletManagement</span><span class="p">.</span><span class="na">OnWalletExportCallback</span> <span class="p">{</span>
+	<span class="kt">void</span> <span class="nf">exportComplete</span><span class="p">(</span><span class="n">ErrorResponse</span> <span class="n">error</span><span class="p">,</span> <span class="n">String</span> <span class="n">qrCode</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ol class="simple">
+<li><p>Importing a Wallet: A Qr code can be used to reconstruct a users wallet by using the following method</p></li>
+</ol>
+<ul class="simple">
+<li><p>The importWallet method requires an instance of <code class="docutils literal notranslate"><span class="pre">WebView</span></code> - the <code class="docutils literal notranslate"><span class="pre">WebView</span></code> should be attached to the current <code class="docutils literal notranslate"><span class="pre">Activity</span></code> - to be passed in as the first argument. The second argument should be the Base 64 encoded Qr code, and the third argument should be a user provided password that checks the integrity of the Qr code.</p></li>
+<li></li>
+</ul>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span>	<span class="n">WalletManagement</span><span class="p">.</span><span class="na">importWallet</span><span class="p">(</span><span class="n">WebView</span> <span class="n">webview</span><span class="p">,</span> <span class="n">String</span> <span class="n">qrCode</span><span class="p">,</span> <span class="n">String</span> <span class="n">password</span><span class="p">,</span> <span class="n">WalletManagement</span><span class="p">.</span><span class="na">OnWalletImportedCallback</span> <span class="n">callback</span><span class="p">);</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Get the result by implementing the following interface</p></li>
+</ul>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">WalletManagement</span><span class="p">.</span><span class="na">OnWalletImportedCallback</span> <span class="p">{</span>
+	<span class="kt">void</span> <span class="nf">importComplete</span><span class="p">(</span><span class="n">ErrorResponse</span> <span class="n">error</span><span class="p">,</span> <span class="n">String</span> <span class="n">message</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Note: This action if successful will delete the current Wallet of the user</strong></p>
+<ol class="simple">
+<li><p>Deleting a Wallet: The users Wallet can be wiped by invoking the following method</p></li>
+</ol>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">WalletManagement</span><span class="p">.</span><span class="na">deleteWallet</span><span class="p">(</span><span class="n">String</span> <span class="n">password</span><span class="p">,</span> <span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// Show error.getErrorMessage();</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+		<span class="c1">// Show message to confirm wallet has been successfully imported</span>
+	<span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<ol class="simple">
+<li><p>Listing accounts: The users <code class="docutils literal notranslate"><span class="pre">Account</span></code>’s can be fetched by calling the following method</p></li>
+</ol>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">List</span><span class="o">&lt;</span><span class="n">Account</span><span class="o">&gt;</span> <span class="n">accounts</span> <span class="o">=</span> <span class="n">WalletManagement</span><span class="p">.</span><span class="na">listAccounts</span><span class="p">();</span>
+</pre></div>
+</div>
+<ol class="simple">
+<li><p>Deleting an individual account: An Account can be deleted by calling the following method</p></li>
+</ol>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">WalletManagement</span><span class="p">.</span><span class="na">deleteAccount</span><span class="p">(</span><span class="n">Account</span> <span class="n">account</span><span class="p">);</span>
+</pre></div>
+</div>
+<ol class="simple">
+<li><p>Synchronizing the users Wallet with server: The <code class="docutils literal notranslate"><span class="pre">syncWallet</span></code> method call checks the server for updates to the users Wallet and updates the Wallet as necessary</p></li>
+</ol>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">WalletManagement</span><span class="p">.</span><span class="na">sync</span><span class="p">(</span><span class="n">WalletManagement</span><span class="p">.</span><span class="na">OnSyncCompletedCallback</span> <span class="n">callback</span><span class="p">);</span>
+</pre></div>
+</div>
+<ol class="simple">
+<li><p>Changing the master password: The <code class="docutils literal notranslate"><span class="pre">changeMasterPassword</span></code> takes the user’s current password and updates it a new password</p></li>
+</ol>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kt">boolean</span> <span class="n">success</span> <span class="o">=</span> <span class="n">WalletManagement</span><span class="p">.</span><span class="na">changeMasterPassword</span><span class="p">(</span><span class="n">String</span> <span class="n">oldPassword</span><span class="p">,</span> <span class="n">String</span> <span class="n">newPassword</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="purposes-and-permission-code-generation">
+<h3>Purposes and Permission Code Generation<a class="headerlink" href="#purposes-and-permission-code-generation" title="Permalink to this headline">¶</a></h3>
+<p><img alt="https://authoriti-sdk.s3.amazonaws.com/images/permissioncode.png" src="https://authoriti-sdk.s3.amazonaws.com/images/permissioncode.png" /></p>
+<p>A Permission Code is a 10 digit code that encrypts certain authorizations (Purpose), and also digitally signs the authorizations - meaning if the Permission Code is validated by Authoriti servers, the Permission Code</p>
+<ul class="simple">
+<li><p>Must have been generated by the user whose public key validated the Permission Code, and</p></li>
+<li><p>The user must have given the authorizations encrypted in the Permission Code, and</p></li>
+<li><p>No one else could have generated this Permission Code with the set of Authorizations for which it was validated</p></li>
+</ul>
+<ol class="simple">
+<li><p>Purpose: Purposes are customer specific and the invitation code(s) a user uses determines the purposes they can generate Permission Codes for. The SDK provides methods for getting purposes and the <em>Schema</em> of each purpose. A customer may add or remove purposes tied to an invitation code. Thus the list of purposes stored in the system must be refreshed. The SDK provides a method for refreshing the list of purposes, and it is the responsibility of the developer to call the refresh method periodically.</p></li>
+</ol>
+<ul class="simple">
+<li><p>Syncing Purposes: The following method downloads the list of purposes the user has access to</p></li>
+</ul>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">sdk</span><span class="p">.</span><span class="na">syncPurposes</span><span class="p">(</span><span class="n">Purpose</span><span class="p">.</span><span class="na">OnPurposesFetchedCallback</span> <span class="n">callback</span><span class="p">)</span>
+
+<span class="c1">// To get the results implement the following interface</span>
+<span class="c1">// interface OnPurposesFetched {</span>
+<span class="c1">//	void onPurposesFetched(ErrorResponse error, List&lt;Purpose&gt; purposes);</span>
+<span class="c1">// }</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Getting Purposes: The following method returns the list of purposes stored on the device</p></li>
+</ul>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">List</span><span class="o">&lt;</span><span class="n">PurposeData</span><span class="o">&gt;</span> <span class="n">purposes</span> <span class="o">=</span> <span class="n">sdk</span><span class="p">.</span><span class="na">getPurposes</span><span class="p">();</span>
+
+<span class="c1">// purposeData.getGroup() returns the group to which the purpose belongs to</span>
+<span class="c1">// purposeData.getPresetPicker() is null if no picker was set by the server. If it&#39;s not null, then the picker returned by getPresetPicker() should default to purposeData.getPresetPickerValue()</span>
+</pre></div>
+</div>
+<p>The group to which a purpose belongs may be fetched by calling the method <code class="docutils literal notranslate"><span class="pre">getGroup()</span></code> on an instance of Purpose Data.</p>
+<ul class="simple">
+<li><p>Getting schema from a purpose: The schema defines the relevant UI and the relevant data of a purpose and is used to generate Permission Codes for the purpose. The SDK provides methods to fetch schema from instances of <code class="docutils literal notranslate"><span class="pre">PurposeData</span></code>. It is up to the implementation to decide the UI which an app user would use to enter the required data.</p></li>
+</ul>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">List</span><span class="o">&lt;</span><span class="n">Schema</span><span class="o">&gt;</span> <span class="n">schema</span> <span class="o">=</span> <span class="n">purposeData</span><span class="p">.</span><span class="na">getSchema</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>Each schema object represents a UI element which must be populated with data to generate a Permission Code. Each schema element provides the following methods to help with rendering the input form.</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Picker</span> <span class="n">picker</span> <span class="o">=</span> <span class="n">schema</span><span class="p">.</span><span class="na">getInputPicker</span><span class="p">();</span>
+<span class="c1">// possible Picker types are</span>
+
+<span class="c1">// Dropdown pickers. if picker type is anyone of the following, these UI displayed should be a dropdown</span>
+<span class="c1">// Picker.ACCOUNT_ID: A dropdown with pre-populated list of user accounts. User accounts should be fetched with sdk.listAccounts()</span>
+<span class="c1">// Picker.INDUSTRY, Picker.LOCATION_COUNTRY, Picker.LOCATION_STATE, Picker.GEO, Picker.REQUESTOR: Dropdown values should be populated with picker.getValues()</span>
+<span class="c1">// Picker.DATA_TYPE: Dropdown values should be populated with picker.getDataTypes(requestorId) where requestorId is the value of the Picker.REQUESTOR selected item.</span>
+
+<span class="c1">// Time picker: if picker type is Picker.TIME, the UI element should be an appropriate time picker</span>
+
+<span class="c1">// Input picker: if picker type is Picker.INPUT, the UI element should be an input field</span>
+
+<span class="c1">// A picker should only be rendered if picker.renderUI() is true.</span>
+<span class="c1">// A picker&#39;s label should be picker.getlabel()</span>
+<span class="c1">// A picker&#39;s input hint should be picker.getTitle()</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Check Permission Code Request: The following method will check the server for pending Permission Code requests. If a request is available, the callback will return a <code class="docutils literal notranslate"><span class="pre">List&lt;Schema&gt;</span></code> object, with instances of the Schema object populated with a <code class="docutils literal notranslate"><span class="pre">getRequestValue()</span></code> which signifies the value that the input field must contain.</p></li>
+</ul>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">sdk</span><span class="p">.</span><span class="na">checkPermissionCodeRequest</span><span class="p">(</span><span class="n">PermissionCode</span><span class="p">.</span><span class="na">OnPermissionCodeRequestChecked</span> <span class="n">callback</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>To get the Permission Code request, the following interface should be implemented</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kd">interface</span> <span class="nc">OnPermissionCodeRequestChecked</span> <span class="p">{</span>
+	<span class="kt">void</span> <span class="nf">onPermissionCodeRequestRecieved</span><span class="p">(</span><span class="n">ErrorResponse</span> <span class="n">error</span><span class="p">,</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Schema</span><span class="o">&gt;</span> <span class="n">schema</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// schema will be null if there&#39;s no pending Permission Code request for the user.</span>
+<span class="c1">// The implementation details of polling such as frequency of the check requests is left upto the developer</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Generate Permission Code: To generate a Permission Code, the following method should be called with a <code class="docutils literal notranslate"><span class="pre">PurposeData</span> </code> object as the first argument - signifying the purpose for which the Permission Code is being generated, a <code class="docutils literal notranslate"><span class="pre">List&lt;Schema&gt;</span></code> object with each <code class="docutils literal notranslate"><span class="pre">Schema</span></code> element populated with user input data by calling <code class="docutils literal notranslate"><span class="pre">setUserInput(String)</span></code> on its instance.</p></li>
+</ul>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">List</span><span class="o">&lt;</span><span class="n">Schema</span><span class="o">&gt;</span> <span class="n">schema</span> <span class="o">=</span> <span class="n">purposeData</span><span class="p">.</span><span class="na">getSchema</span><span class="p">();</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">Schema</span> <span class="n">s</span><span class="p">:</span> <span class="n">schema</span><span class="p">))</span> <span class="p">{</span>
+	<span class="n">s</span><span class="p">.</span><span class="na">setUserInput</span><span class="p">(</span><span class="n">userInput</span><span class="p">);</span> <span class="c1">// userInput is the user entered data for this scheme</span>
+<span class="p">}</span>
+<span class="n">String</span> <span class="n">permissionCode</span> <span class="o">=</span> <span class="n">sdk</span><span class="p">.</span><span class="na">generatePermissionCode</span><span class="p">(</span><span class="n">purposeData</span><span class="p">,</span> <span class="n">schema</span><span class="p">);</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Pushing permission code to the server: Permission Code is sent to the Customer by the User by a method of their choosing. However, a Permission Code generated in response to a Permission Code request or over a phone call, can be sent to the server using the following method</p></li>
+</ul>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">sdk</span><span class="p">.</span><span class="na">sendPermissionCode</span><span class="p">(</span><span class="n">Account</span> <span class="n">account</span><span class="p">,</span> <span class="n">String</span> <span class="n">permissionCode</span><span class="p">,</span> <span class="n">PermissionCode</span><span class="p">.</span><span class="na">OnPermissionCodeSentCallback</span> <span class="n">listener</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Authoriti SDK</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, CTMInsights.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/README.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

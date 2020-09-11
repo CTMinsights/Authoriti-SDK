@@ -4,8 +4,15 @@ Welcome to Authoriti SDK's documentation!
 =========================================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 1
+   
+   docs/Introduction
+   docs/Prerequisites
+   docs/Setup
+   docs/SDK Initialization
+   docs/Signing Up
+   docs/Wallet Management
+   docs/Purposes
 
 
 
