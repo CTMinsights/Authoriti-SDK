@@ -1,7 +1,4 @@
-.. Authoriti SDK documentation master file, created by
-   sphinx-quickstart on Fri Sep 11 16:01:20 2020.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. Authoriti SDK.
 
 Welcome to Authoriti SDK's documentation!
 =========================================
