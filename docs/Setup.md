@@ -32,7 +32,10 @@ allprojects {
         }
     }
 }
+
 ```
+
+Instead of adding the keys directly, it is recommended that the keys are added to the file `local.properties`
 
 submodule `build.gradle` should have the following entry
 
