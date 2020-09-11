@@ -12,4 +12,4 @@ The Authoriti Permission Code validation flow is described below.
 
 The Authoriti SDK work flows are described below
 
-![](https://authoriti-sdk.s3.amazonaws.com/images/flowchart.jpg)
+![](https://authoriti-sdk-docs.s3.amazonaws.com/Authoriti%20-%20System%20Flow%20Chart.jpg)
