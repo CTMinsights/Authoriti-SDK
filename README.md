@@ -19,7 +19,6 @@ The Authoriti SDK work flows are described below
 ![](https://authoriti-sdk.s3.amazonaws.com/images/flowchart.jpg)
 
 testing 
-<iframe width="816" height="1000" src="https://miro.com/app/embed/o9J_klx5LPY=/?" frameborder="0" scrolling="no" allowfullscreen></iframe>
 ## Prerequisites
 
 - Supports Android SDK version 21 and above
