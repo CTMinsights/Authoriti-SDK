@@ -13,3 +13,7 @@ The Authoriti Permission Code validation flow is described below.
 The Authoriti SDK work flows are described below
 
 ![](https://authoriti-sdk-docs.s3.amazonaws.com/Authoriti%20-%20System%20Flow%20Chart%20%285%29.jpg) 
+
+.. raw:: html
+<iframe width="700" height="1000" src="https://miro.com/app/embed/o9J_klx5LPY=/?" frameborder="0" scrolling="no" allowfullscreen></iframe>
+
