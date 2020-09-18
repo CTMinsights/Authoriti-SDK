@@ -123,7 +123,7 @@ A customer may be deleted with the following API call. {{subdomain}} in the quer
 DELETE /api/1/customers/{{suddomain}}
 ```
 
-### Customer Management APIs ###
+### Customer APIs ###
 
 **Authentication**
 
@@ -232,10 +232,10 @@ user_id,user_password,account value,account name
 
  Each purpose takes it's own payload (CTI - Companion Transmitted Information), but all the purposes require the following parameters
 
- | Parameter          | Description                                                                                                                                                |
-|--------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| accountId          | A SHA256 hash of the account id, lowercased and stripped of all non-alphanumeric characters and space.                                                     |
-| passcode           | The 10 digit Permission Code                                                                                                                               |
+ | Parameter | Description |
+|-|-|
+| accountId | A SHA256 hash of the account id, lowercased and stripped of all non-alphanumeric characters and space. |
+| passcode | The 10 digit Permission Code |
 | customerImportOnly | A flag indicating whether to validate non customer imported users. If set to true, only users who were uploaded by the calling customer would be uploaded. |
 
 To authenticate validation requests, the license key must be sent as Authorization header in the following format
