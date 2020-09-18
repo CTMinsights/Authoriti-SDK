@@ -4,7 +4,7 @@ Welcome to Authoriti SDK's documentation!
 =========================================
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 3
    
    docs/Introduction
    docs/rest-api
