@@ -1,10 +1,10 @@
-## The Authoriti Rest API can be used to create, edit & delete customers, manage Invitation Codes & perform Permission Code validations.
+## Authorit REST API
 
 ### Customer Management APIs ###
 
 All customer management methods require authentication. Authentication requires passing a Bearer token in the Authorization header. The login API grants the bearer token.
 
-### Login
+## Login
 
 ```curl
 POST /api/1/auth/login
