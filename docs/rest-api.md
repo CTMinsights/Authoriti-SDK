@@ -4,7 +4,7 @@
 
 All customer management methods require authentication. Authentication requires passing a Bearer token in the Authorization header. The login API grants the bearer token.
 
-## Login
+## Login ##
 
 ```curl
 POST /api/1/auth/login
@@ -36,7 +36,7 @@ Possible response:
 }
 ```
 
-## Create customer
+## Create customer ##
 
 Creating a customer is a two step process. The GET Areas API should be called to get the IDs of the Area which the customer will have enabled. Finally the create customer API should be called.
 
@@ -90,7 +90,7 @@ POST /api/1/customers
 
 ```
 
-## Edit Customer
+## Edit Customer ##
 
 If the areas enabled for the customer needs to be edited, then GET Areas API must be called to get the Area IDs. A customer may be edited with the following API call, where the {{subdomain}} in the URL is the subdomain of the customer being edited. The body parameters are the same as that of create customer API call.
 
@@ -115,7 +115,7 @@ PUT /api/1/customers/{{subdomain}}
 }
 ```
 
-## Delete Customer
+## Delete Customer ##
 
 A customer may be deleted with the following API call. {{subdomain}} in the query path is the subdomain of the customer being deleted.
 
@@ -126,11 +126,11 @@ DELETE /api/1/customers/{{suddomain}}
 
 ### Customer APIs ###
 
-## Authentication
+## Authentication ##
 
 All customer APIs require the subdomain of the customer to be in the query path. All methods require authentication. Authentication requires passing a Bearer token in the Authorization header. The login API grants the bearer token.
 
-# Login API
+## Login API ##
 
 ```curl
 POST /api/1/portal/{{subdomain}}/auth/login
@@ -146,7 +146,7 @@ Response:
 }
 ```
 
-# Invitation Code API
+## Invitation Code API ##
 
 Creating and Editing Invitation Codes require Purpose (Area) Ids. The portal details API may be used to get list of purposes enabled for this customer
 
@@ -202,7 +202,7 @@ Deleting Invitation Code requires the ID of the invitation code being deleted
 DELETE /api/1/portal/{{subdomain}}/invites/{{invitation_code_id}}
 ```
 
-## Bulk Upload
+## Bulk Upload ##
 
 To upload users into the system, so they can register using the Authoriti app, a formatted CSV with user credentials needs to be uploaded. The CSV must conform to the following format
 
