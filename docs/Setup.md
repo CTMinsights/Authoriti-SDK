@@ -1,4 +1,6 @@
-### Setup
+## Setup
+
+### Android
 
 1. Specify the permissions in the App manifest file:
 
@@ -46,3 +48,11 @@ dependencies {
 ```
 
 Syncing the project either via Terminal or the Android Studio IDE should let S3 be used as an artifact repository.
+
+### iOS
+
+Using Cocoapods add the following podfile:
+
+```
+pod 'AuthoritiSDK', '~> 0.0.4'
+```
