@@ -1,86 +1,68 @@
 ## Create customer
 
-Creating a customer is a two step process. The GET Areas API should be called to get the IDs of the Area which the customer will have enabled. Finally the create customer API should be called.
+A new customer can be created by calling the Create Customer API
 
-1. Get Areas
+| Parameter        | Description                                                                                 |
+| ---------------- | ------------------------------------------------------------------------------------------- |
+| name             | The name of the customer                                                                    |
+| phone            | The phone number of the customer                                                            |
+| email            | The email of the customer                                                                   |
+| industry         | The industry of the customer                                                                |
+| location         | The state in which the customer is located                                                  |
+| parent_location  | The country in which the customer is located                                                |
+| dataTypes        | Array of data types                                                                         |
+| callCenter       | A boolean value indicated whether customers call center has Permission Code support enabled |
+| callCenterNumber | Customers call center number                                                                |
 
 ```curl
-GET /api/1/areas
-
-Response:
-
+POST /api/v1/customers
 {
-    id: "uuid",
-    name: "string",
-    group: "integer"
+    "name": "string",
+    "phone": "string",
+    "email": "string",
+    "industry": "number", // a two digit code indicating the industry
+    "location": "number", // a two digit code indicating the location
+    "parent_location": "USA",
+    "dataTypes": ["string"],
+    "callCenter": "boolean",
+    "callCenterNumber": "string"
 }
 ```
 
-2. Create customer
+The create customer API returns the following response
 
-| Parameter                | Description                                                                                                    |
-|--------------------------|----------------------------------------------------------------------------------------------------------------|
-| customer_name            | The name of the customer                                                                                       |
-| customer_subdomain       | The subdomain at which the portal will be available                                                            |
-| customer_logo            | The customer logo                                                                                              |
-| allow_non_email_username | If set to true, the portals username can be non-email strings, otherwise usernames must be valid email strings |
-| theme                    | Must be 6 character RGB values. Describes the theme of the portal                                              |
-| domains                  | If allow_non_email_username is set to false, possible usernames can only have domains from this array          |
-| areas                    | The areas to enable for this customer. Must be UUID's returned from GET Areas API                              |
-| admin_email              | The admin of this portal. This email will get a validation email                                               |
-
-
-```curl
-POST /api/1/customers
+```json
 {
-    "customer_name": "string",
-    "customer_subdomain": "string",
-    "customer_logo": "string",
-    "allow_non_email_username": "string",
-    "admin_email": "string",
-    "theme": {
-        "navigation_bar_color": "string",
-        "theme_color": "string",
-        "primary_color": "string",
-        "warning_color": "string",
-        "danger_color": "string",
-        "success_color": "string"
-    },
-    "domain": ["string"],
-    "areas": ["uuid"]
+  "licenseKey": "string",
+  "customerId": "uuid"
 }
-
 ```
+
+This licenseKey must be used when validating Permission Codes for this customer. The customer ID is needed to make edits to the customer.
 
 ## Edit Customer
 
-If the areas enabled for the customer needs to be edited, then GET Areas API must be called to get the Area IDs. A customer may be edited with the following API call, where the {{subdomain}} in the URL is the subdomain of the customer being edited. The body parameters are the same as that of create customer API call.
+A customer can be edited by calling the edit customer API. The body parameters are the same as that of create customer API call.
 
 ```curl
-PUT /api/1/customers/{{subdomain}}
+POST /api/v1/customers/{{customerId}}
 {
-    "customer_name": "string",
-    "customer_subdomain": "string",
-    "customer_logo": "string",
-    "allow_non_email_username": "string",
-    "admin_email": "string",
-    "theme": {
-        "navigation_bar_color": "string",
-        "theme_color": "string",
-        "primary_color": "string",
-        "warning_color": "string",
-        "danger_color": "string",
-        "success_color": "string"
-    },
-    "domain": ["string"],
-    "areas": ["uuid"]
+    "name": "string",
+    "phone": "string",
+    "email": "string",
+    "industry": "number", // a two digit code indicating the industry
+    "location": "number", // a two digit code indicating the location
+    "parent_location": "USA",
+    "dataTypes": ["string"],
+    "callCenter": "boolean",
+    "callCenterNumber": "string"
 }
 ```
 
 ## Delete Customer
 
-A customer may be deleted with the following API call. {{subdomain}} in the query path is the subdomain of the customer being deleted.
+A customer may be deleted with the following API call. {{customerId}} in the query path is the customer id of the customer being deleted.
 
 ```curl
-DELETE /api/1/customers/{{suddomain}}
+DELETE /api/v1/customers/{{customerId}}
 ```

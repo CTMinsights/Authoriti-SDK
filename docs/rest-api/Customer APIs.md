@@ -33,7 +33,7 @@ Response
 ```
 
 | Parameter    | Description                                                                                                                    |
-|--------------|--------------------------------------------------------------------------------------------------------------------------------|
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------ |
 | code         | The invitation code                                                                                                            |
 | expires_at   | A date time string indicating the expiration time                                                                              |
 | requires_dlv | A boolean variable indicating whether using this invitation code would require the user to perform Driver's License Validation |
@@ -82,109 +82,108 @@ To upload users into the system, so they can register using the Authoriti app, a
 user_id,user_password,account value,account name
 ```
 
- - user_id: The sha256 hash of the user id
- - user_password: The sha256 hash of the password
- - account value: The SHA256 of the account value. The account value must be stripped of all non-alphanumeric characters including spaces before hashing
- - account name: A string describing the account
+- user_id: The sha256 hash of the user id
+- user_password: The sha256 hash of the password
+- account value: The SHA256 of the account value. The account value must be stripped of all non-alphanumeric characters including spaces before hashing
+- account name: A string describing the account
 
- Bulk Upload API call
+Bulk Upload API call
 
- ```csv
- POST api/1/portal/{{subdomain}}/bulk-upload
- {
-     csv: "link to csv"
- }
- ```
+```csv
+POST api/1/portal/{{subdomain}}/bulk-upload
+{
+    csv: "link to csv"
+}
+```
 
- ## Validation API
+## Validation API
 
+The validation API is hosted in AWS as a lambda function and sits behind AWS API Gateway. All validation requests should be invoked using the following URL
 
- The validation API is hosted in AWS as a lambda function and sits behind AWS API Gateway. All validation requests should be invoked using the following URL
+Validation Request URL: https://5t1bndpu88.execute-api.us-east-1.amazonaws.com
 
- Validation Request URL: https://5t1bndpu88.execute-api.us-east-1.amazonaws.com
+Each purpose takes it's own payload (CTI - Companion Transmitted Information), but all the purposes require the following parameters
 
- Each purpose takes it's own payload (CTI - Companion Transmitted Information), but all the purposes require the following parameters
-
- | Parameter          | Description                                                                                                                                                |
-|--------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Parameter          | Description                                                                                                                                                |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | accountId          | A SHA256 hash of the account id, lowercased and stripped of all non-alphanumeric characters and space.                                                     |
 | passcode           | The 10 digit Permission Code                                                                                                                               |
 | customerImportOnly | A flag indicating whether to validate non customer imported users. If set to true, only users who were uploaded by the calling customer would be uploaded. |
 
 To authenticate validation requests, the license key must be sent as Authorization header in the following format
 
-Authorization: AUTHORITI license_key
+Authorization: AUTHORITI license_key;APIKEY api_key
 
 The response of validation requests is the following object
 
 ```json
 {
-    "passed": "boolean",
-    "message": "string"
+  "passed": "boolean",
+  "message": "string"
 }
 ```
 
- 1. Validating "Manage Account" purpose
+1.  Validating "Manage Account" purpose
 
- ```curl
- POST /dev/api/v1/passcode/validate
- {
-     accountId: "string",
-     customerImportOnly: "boolean",
-     passcode: "string",
-     datatypes: ["string"],
-     schema: "integer",
- }
-
- datatypes is a string of datatypes against which the Permission Code (passcode) is being validated.
- ```
-
- 2. Validating "Transfer Funds" purpose
-
- ```curl
+```curl
 POST /dev/api/v1/passcode/validate
-{
-    accountId: "string",
-     customerImportOnly: "boolean",
-     passcode: "string",
-     schema: "integer",
-     c: "string",
-     e: "string"
-}
-
-c: sha256(payload.accountId.replace(/^0+/, '') + concatenate(payload.routingNumber, payload.accountNumber, payload.amount)
-e: sha256(concatenate(payload.routingNumber, payload.accountNumber, payload.amount)).replace(/^0+/, '')
- ```
-
- 3. Validating "Escrow" purpose
-
- ```curl
- POST /dev/api/v1/passcode/validate
 {
     accountId: "string",
     customerImportOnly: "boolean",
     passcode: "string",
+    datatypes: ["string"],
+    schema: "integer",
+}
+
+datatypes is a string of datatypes against which the Permission Code (passcode) is being validated.
+```
+
+2.  Validating "Transfer Funds" purpose
+
+```curl
+POST /dev/api/v1/passcode/validate
+{
+   accountId: "string",
+    customerImportOnly: "boolean",
+    passcode: "string",
     schema: "integer",
     c: "string",
-    e: "string",
-    h: "string"
+    e: "string"
+}
+
+c: sha256(payload.accountId.replace(/^0+/, '') + concatenate(payload.routingNumber, payload.accountNumber, payload.amount)
+e: sha256(concatenate(payload.routingNumber, payload.accountNumber, payload.amount)).replace(/^0+/, '')
+```
+
+3.  Validating "Escrow" purpose
+
+```curl
+POST /dev/api/v1/passcode/validate
+{
+   accountId: "string",
+   customerImportOnly: "boolean",
+   passcode: "string",
+   schema: "integer",
+   c: "string",
+   e: "string",
+   h: "string"
 }
 
 c: sha256(payload.accountId.replace(/^0+/, '') + concatenate(payload.routingNumber, payload.accountNumber, payload.amount)
 e: sha256(concatenate(payload.routingNumber, payload.accountNumber, payload.amount)).replace(/^0+/, '')
 h: sha256(payload.accountId.replace(/^0+/, '') + concatenate(payload.routingNumber, payload.accountNumber, payload.amount, payload.transactionId)).replace(/^0+/, '')
- ```
+```
 
- 4. Validating "eHealth-Certificate" purpose
+4.  Validating "eHealth-Certificate" purpose
 
-  ```curl
- POST /dev/api/v1/passcode/validate
+```curl
+POST /dev/api/v1/passcode/validate
 {
-    accountId: "string",
-    customerImportOnly: "boolean",
-    passcode: "string",
-    schema: "integer",
-    secret: "string"
+  accountId: "string",
+  customerImportOnly: "boolean",
+  passcode: "string",
+  schema: "integer",
+  secret: "string"
 }
 
 secret: SHA256 hash of the Patient's ID Number stripped of all non-alphanumeric characters and lowercased before hashing.
@@ -193,18 +192,17 @@ secret: SHA256 hash of the Patient's ID Number stripped of all non-alphanumeric 
 
 5. Validating "Insurance Claim" and "Share Personal Information" purposes
 
-  ```curl
- POST /dev/api/v1/passcode/validate
+```curl
+POST /dev/api/v1/passcode/validate
 {
-    accountId: "string",
-    customerImportOnly: "boolean",
-    passcode: "string",
-    schema: "integer",
-    datatypes: ["string"],
-    secret: "string"
+  accountId: "string",
+  customerImportOnly: "boolean",
+  passcode: "string",
+  schema: "integer",
+  datatypes: ["string"],
+  secret: "string"
 }
 
 datatypes: array of Claim Types the Permission Code is being validated against
 secret: SHA256 hash of the Patient's ID Number stripped of all non-alphanumeric characters and lowercased before hashing.
 ```
-
