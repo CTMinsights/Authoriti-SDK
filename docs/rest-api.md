@@ -1,4 +1,4 @@
-## Authorit REST API
+## Authoriti REST API
 
 ### Customer Management APIs
 
