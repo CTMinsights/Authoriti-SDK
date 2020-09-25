@@ -148,7 +148,7 @@ POST api/v1/upload
 
 The validation API is hosted in AWS as a lambda function and sits behind AWS API Gateway. All validation requests should be invoked using the following URL
 
-Validation Request URL: https://w2llo3thfe.execute-api.us-east-1.amazonaws.com
+Validation Request URL: `https://w2llo3thfe.execute-api.us-east-1.amazonaws.com`
 
 Each purpose takes it's own payload (CTI - Companion Transmitted Information), but all the purposes require the following parameters
 
@@ -160,7 +160,7 @@ Each purpose takes it's own payload (CTI - Companion Transmitted Information), b
 
 To authenticate validation requests, the license key must be sent as Authorization header in the following format
 
-Authorization: AUTHORITI license_key;APIKEY api_key
+`Authorization: AUTHORITI license_key;APIKEY api_key`
 
 The response of validation requests is the following object
 
