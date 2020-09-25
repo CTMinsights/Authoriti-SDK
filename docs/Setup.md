@@ -58,3 +58,9 @@ Using Cocoapods add the following podfile:
 ```
 pod 'AuthoritiSDK', '~> 0.0.4'
 ```
+
+To add Driver's License Validation functionality, add the following dependency to the podfile:
+
+```
+pod 'AuthoritiDLV', '~> 0.0.1'
+```
