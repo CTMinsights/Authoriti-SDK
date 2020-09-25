@@ -43,9 +43,11 @@ submodule `build.gradle` should have the following entry
 
 ```
 dependencies {
-    compile group: 'com.authoritisdk', name: 'library', version: '0.1', ext: 'aar', classifier: 'debug'
+    implementation 'com.authoritisdk:AuthoritiSDK:0.1'
 }
 ```
+
+To include the Driver's License Validation module, add `implementation 'com.authoriti:dlv:0.1'` to the dependencies.
 
 Syncing the project either via Terminal or the Android Studio IDE should let S3 be used as an artifact repository.
 
