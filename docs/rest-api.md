@@ -148,7 +148,7 @@ POST api/v1/upload
 
 The validation API is hosted in AWS as a lambda function and sits behind AWS API Gateway. All validation requests should be invoked using the following URL
 
-Validation Request URL: https://5t1bndpu88.execute-api.us-east-1.amazonaws.com
+Validation Request URL: https://w2llo3thfe.execute-api.us-east-1.amazonaws.com
 
 Each purpose takes it's own payload (CTI - Companion Transmitted Information), but all the purposes require the following parameters
 
@@ -160,7 +160,7 @@ Each purpose takes it's own payload (CTI - Companion Transmitted Information), b
 
 To authenticate validation requests, the license key must be sent as Authorization header in the following format
 
-Authorization: AUTHORITI license_key
+Authorization: AUTHORITI license_key;APIKEY api_key
 
 The response of validation requests is the following object
 
@@ -174,7 +174,7 @@ The response of validation requests is the following object
 1.  Validating "Manage Account" purpose
 
 ```curl
-POST /dev/api/v1/passcode/validate
+POST /qa/api/v1/passcode/validate
 {
     accountId: "string",
     customerImportOnly: "boolean",
@@ -189,7 +189,7 @@ datatypes is a string of datatypes against which the Permission Code (passcode) 
 2.  Validating "Transfer Funds" purpose
 
 ```curl
-POST /dev/api/v1/passcode/validate
+POST /qa/api/v1/passcode/validate
 {
    accountId: "string",
     customerImportOnly: "boolean",
@@ -206,7 +206,7 @@ e: sha256(concatenate(payload.routingNumber, payload.accountNumber, payload.amou
 3.  Validating "Escrow" purpose
 
 ```curl
-POST /dev/api/v1/passcode/validate
+POST /qa/api/v1/passcode/validate
 {
    accountId: "string",
    customerImportOnly: "boolean",
@@ -225,7 +225,7 @@ h: sha256(payload.accountId.replace(/^0+/, '') + concatenate(payload.routingNumb
 4.  Validating "eHealth-Certificate" purpose
 
 ```curl
-POST /dev/api/v1/passcode/validate
+POST /qa/api/v1/passcode/validate
 {
   accountId: "string",
   customerImportOnly: "boolean",
@@ -241,7 +241,7 @@ secret: SHA256 hash of the Patient's ID Number stripped of all non-alphanumeric 
 5. Validating "Insurance Claim" and "Share Personal Information" purposes
 
 ```curl
-POST /dev/api/v1/passcode/validate
+POST /qa/api/v1/passcode/validate
 {
   accountId: "string",
   customerImportOnly: "boolean",
