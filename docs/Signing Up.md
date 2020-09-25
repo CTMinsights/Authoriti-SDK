@@ -21,7 +21,34 @@ interface OnResultReceivedCallback {
 // result.getCustomerName() returns the name of the customer who created the invitation code.
 ```
 
-**Note: Calling the checkInvitationMethod is optional since _signup_ requires the invitation code to be passed. The _checkInvitationCode_ method is useful to build interfaces that use a two step signup process with the first step being checking if the user has a valid invitation code and then asking the user to enter their username and password. The string from _getCustomerName()_ can identify the customer the user is registering to.**
+**Note: Calling the checkInvitationMethod is optional since _signup_ requires the invitation code to be passed. The _checkInvitationCode_ method is useful to build interfaces that use a two step signup process with the first step being checking if the user has a valid invitation code and depending on the type of invitation code checking if Driver's License Validation is required; then asking the user to enter their username and password. The string from _getCustomerName()_ can identify the customer the user is registering to.**
+
+If Driver's License Validation is required, then after the signup call, DLV can be validated using the following API call
+
+```java
+	DLV.initialize(sdk); // sdk is an instance of Authoriti class
+	startActivityForResult(new Intent(Activity.this, DocumentUploadActivity.class), DLV_REQUEST_CODE);
+```
+
+The callback `onActivityResult` of `Activity` will recieve the driver's license validation result. Here's an example
+
+```java
+	@Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == DLV_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                ProcessedData processedData = data.getParcelableExtra(DLV.EXTRA_PROCESSED_DATA);
+                if (processedData != null) {
+                    new AlertDialog.Builder(this)
+                            .setMessage(processedData.formattedString)
+                            .setPositiveButton(android.R.string.ok, null)
+                            .show();
+                }
+            }
+        }
+    }
+```
 
 2. Signup user
 
