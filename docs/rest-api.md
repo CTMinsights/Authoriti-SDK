@@ -171,7 +171,7 @@ The response of validation requests is the following object
 }
 ```
 
-1.  Validating "Manage Account" purpose
+- Validating "Manage Account" purpose
 
 ```curl
 POST /qa/api/v1/passcode/validate
@@ -186,7 +186,7 @@ POST /qa/api/v1/passcode/validate
 datatypes is a string of datatypes against which the Permission Code (passcode) is being validated.
 ```
 
-2.  Validating "Transfer Funds" purpose
+- Validating "Transfer Funds" purpose
 
 ```curl
 POST /qa/api/v1/passcode/validate
@@ -203,7 +203,7 @@ c: sha256(payload.accountId.replace(/^0+/, '') + concatenate(payload.routingNumb
 e: sha256(concatenate(payload.routingNumber, payload.accountNumber, payload.amount)).replace(/^0+/, '')
 ```
 
-3.  Validating "Escrow" purpose
+- Validating "Escrow" purpose
 
 ```curl
 POST /qa/api/v1/passcode/validate
@@ -222,7 +222,7 @@ e: sha256(concatenate(payload.routingNumber, payload.accountNumber, payload.amou
 h: sha256(payload.accountId.replace(/^0+/, '') + concatenate(payload.routingNumber, payload.accountNumber, payload.amount, payload.transactionId)).replace(/^0+/, '')
 ```
 
-4.  Validating "eHealth-Certificate" purpose
+- Validating "eHealth-Certificate" purpose
 
 ```curl
 POST /qa/api/v1/passcode/validate
@@ -238,7 +238,7 @@ secret: SHA256 hash of the Patient's ID Number stripped of all non-alphanumeric 
 
 ```
 
-5. Validating "Insurance Claim" and "Share Personal Information" purposes
+- Validating "Insurance Claim" and "Share Personal Information" purposes
 
 ```curl
 POST /qa/api/v1/passcode/validate
