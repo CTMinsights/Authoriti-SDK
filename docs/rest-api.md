@@ -152,11 +152,13 @@ Validation Request URL: `https://w2llo3thfe.execute-api.us-east-1.amazonaws.com`
 
 Each purpose takes it's own payload (CTI - Companion Transmitted Information), but all the purposes require the following parameters
 
+```eval_rst
 | Parameter          | Description                                                                                                                                                |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | accountId          | A SHA256 hash of the account id, lowercased and stripped of all non-alphanumeric characters and space.                                                     |
 | passcode           | The 10 digit Permission Code                                                                                                                               |
 | customerImportOnly | A flag indicating whether to validate non customer imported users. If set to true, only users who were uploaded by the calling customer would be uploaded. |
+```
 
 To authenticate validation requests, the license key must be sent as Authorization header in the following format
 
