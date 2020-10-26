@@ -26,6 +26,9 @@ allprojects {
         google()
         jcenter()
         maven {
+            url 'https://jitpack.io'
+        }
+        maven {
             url "s3://authoriti-sdk.s3.amazonaws.com"
             credentials(AwsCredentials) {
                 accessKey "ACCESS-KEY"
